@@ -6,7 +6,6 @@
 }
 
 :root {
-    /* Declaro variables CSS con colores principales */
     --color-theme: #FFCE30;
     --color-active: #288BA8;
     --color-back-active: #746AB0;
@@ -131,9 +130,6 @@ main p {
     margin-bottom: 16px;
 }
 
-
-/* Media Query: Estilos a aplicar sólo en pantallas mayores a 400px */
-
 @media (min-width: 400px) {
     main {
         padding-left: 10%;
@@ -200,9 +196,6 @@ main p {
 .verde {
     background-color: #28a745;
 }
-
-
-/* */
 
 #form-movie-new {
     display: flex;
@@ -304,4 +297,16 @@ input {
 .form-cine_contacto {
     justify-content: center;
     align-items: center;
+}
+
+.message {
+    padding: 10px;
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+    margin-bottom: 10px;
+}
+
+.hidden {
+    display: none;
 }

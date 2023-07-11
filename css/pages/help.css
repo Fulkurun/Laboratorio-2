@@ -6,7 +6,6 @@
 }
 
 :root {
-    /* Declaro variables CSS con colores principales */
     --color-theme: #FFCE30;
     --color-active: #288BA8;
     --color-back-active: #746AB0;
@@ -130,9 +129,6 @@ main p {
     margin-bottom: 16px;
 }
 
-
-/* Media Query: Estilos a aplicar sólo en pantallas mayores a 400px */
-
 @media (min-width: 400px) {
     main {
         padding-left: 10%;
@@ -199,9 +195,6 @@ main p {
 .verde {
     background-color: #28a745;
 }
-
-
-/* */
 
 #form-movie-new {
     display: flex;
