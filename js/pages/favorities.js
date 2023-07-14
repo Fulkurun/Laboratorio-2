@@ -2,50 +2,52 @@ $(document).ready(function() {
     var favoritesContainer = $('#contenedorFavoritas');
     var emptyMessage = $('#empty-message');
 
-    // obtine la pelicula favorita guardada 
+    // Obtiene las películas favoritas guardadas
     var storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     showFavorites(storedFavorites, favoritesContainer);
 
-    // mensaje que muestra si no hay peli favorita
-    if (storedFavorites.length === 0) {
-        showEmptyMessage();
-    }
+    // Muestra un mensaje si no hay películas favoritas
+    updateEmptyMessage();
 
-    // boton de eliminar de favoritos
+    // Botón para eliminar de favoritos
     favoritesContainer.on('click', '.button-remove', function() {
-        var movieContainer = $(this).closest('.contenedorPeliculas');
+        var movieContainer = $(this).closest('.contenedorPelicula');
         var movieId = movieContainer.attr('data-id');
         removeFavorite(movieId);
         movieContainer.remove();
 
-        // mira si si no hay peliculas en favoritos
-        if (favoritesContainer.children().length === 0) {
-            showEmptyMessage();
-        }
+        // Verifica si no hay películas en favoritos
+        updateEmptyMessage();
     });
 
-    // parte que muetra las peliculas favoritas
     function showFavorites(favorites, container) {
         container.empty();
 
+        // Crea un contenedor adicional para la cuadrícula horizontal
+        var horizontalContainer = $('<div class="horizontal-container"></div>');
+        container.append(horizontalContainer);
+
         favorites.forEach(function(favorite) {
             var movieHTML = `
-                <div class="contenedorPeliculas" data-id="${favorite.id}">
+                <div class="contenedorPelicula" data-id="${favorite.id}">
                     <img src="https://image.tmdb.org/t/p/w500/${favorite.poster_path}" alt="Poster de la película">
-                    <h3>${favorite.title}</h3>
-                    <p><b>Codigo:</b> ${favorite.id}</p>
-                    <p><b>Titulo Original:</b> ${favorite.original_title}</p>
-                    <p><b>Idioma Original:</b> ${favorite.original_language}</p>
-                    <p><b>Año:</b> ${favorite.release_date}</p>
+                    <div class="movie-details">
+                        <h3>${favorite.title}</h3>
+                        <p><b>Codigo:</b> ${favorite.id}</p>
+                        <p><b>Titulo Original:</b> ${favorite.original_title}</p>
+                        <p><b>Idioma Original:</b> ${favorite.original_language}</p>
+                        <p><b>Año:</b> ${favorite.release_date}</p>
+                    </div>
                     <button class="button-remove">Eliminar de favoritos</button>
                 </div>
             `;
 
-            container.append(movieHTML);
+            // Agrega cada película al contenedor horizontal
+            horizontalContainer.append(movieHTML);
         });
     }
 
-    // Parte para remover la peliculas favoritas
+    // Remueve una película de favoritos
     function removeFavorite(movieId) {
         var storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
@@ -56,8 +58,13 @@ $(document).ready(function() {
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
     }
 
-    // lo que dice si hay pelicula vacia 
-    function showEmptyMessage() {
-        emptyMessage.removeClass('hidden');
+    // Muestra u oculta el mensaje si no hay películas favoritas
+    function updateEmptyMessage() {
+        var storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        if (storedFavorites.length === 0) {
+            emptyMessage.removeClass('hidden');
+        } else {
+            emptyMessage.addClass('hidden');
+        }
     }
 });

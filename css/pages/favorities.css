@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 * {
     box-sizing: border-box;
     margin: 0;
@@ -219,18 +220,35 @@ input {
 }
 
 button {
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    font-size: 12px;
+    width: 150px;
+    height: 40px;
+    background: #3dea65;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0px 0px 10px #446d3b;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    transition: 0.2s;
+}
+
+button:active {
+    transition: 0.2s;
+    transform: translateY(0px);
+    box-shadow: 0px 0px 0px;
+    background: #0c3e00;
 }
 
 .message {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: var(--color-titulos);
+    text-align: center;
 }
 
 .success {
@@ -246,9 +264,17 @@ button {
 }
 
 .contenedorPeliculas {
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     margin-top: 20px;
+}
+
+.contenedorPeliculas .contenedorPelicula {
+    width: 300px;
+    margin: 10px;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 
 .contenedorPeliculas img {
@@ -257,54 +283,47 @@ button {
     border-radius: 5px;
 }
 
+.contenedorPeliculas .movie-details {
+    padding: 10px;
+}
+
 .contenedorPeliculas h3 {
     margin-top: 10px;
     margin-bottom: 5px;
     font-size: 18px;
+    text-align: center;
 }
 
 .contenedorPeliculas p {
     margin: 0;
     font-size: 14px;
+    text-align: center;
 }
 
-.contenedorPeliculasFavoritas {
-    width: 400px;
-    height: 1000px;
+.contenedorPeliculas .button-remove {
+    display: block;
+    margin: 10px auto;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.contenedorPeliculasFavoritas img {
-    width: 400px;
-    height: 450px;
-    border-radius: 10px;
-    box-shadow: 4px 5px 6px 0px #000000;
+.horizontal-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: -10px;
+    -webkit-overflow-scrolling: touch;
 }
 
-input {
-    height: 40px;
-    width: 300px;
-}
-
-.form-cine_contacto {
-    justify-content: center;
-    align-items: center;
-}
-
-div div {
-    margin-top: 50px;
-}
-
-.message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.hidden {
+.horizontal-container::-webkit-scrollbar {
     display: none;
+}
+
+.horizontal-container .contenedorPeliculas {
+    flex: 0 0 auto;
 }
