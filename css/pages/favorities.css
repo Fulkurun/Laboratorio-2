@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 * {
     box-sizing: border-box;
     margin: 0;
@@ -326,4 +325,27 @@ button:active {
 
 .horizontal-container .contenedorPeliculas {
     flex: 0 0 auto;
+}
+
+#loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
+.loader {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

@@ -2,6 +2,7 @@ $(document).ready(function() {
     var container = $('#contenedorPeliculas');
     var successMessage = $('#success-message');
     var existingMovieMessage = $('#existing-movie-message');
+    var loader = $('#loader');
     var pagina = 1;
 
     function statusBtnAnterior(pag) {
@@ -14,18 +15,24 @@ $(document).ready(function() {
 
     // Obtener las películas de la API al cargar la página
     function obtenerPeliculas() {
-        $.ajax({
-            url: 'https://api.themoviedb.org/3/movie/popular?api_key=4d99c08c8adc19218dd31e7d7794329c',
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                var movies = response.results;
-                showMovies(movies, container);
-            },
-            error: function() {
-                console.log('Error al cargar los datos de la API');
-            }
-        });
+        showLoader();
+
+        setTimeout(function() {
+            $.ajax({
+                url: 'https://api.themoviedb.org/3/movie/popular?api_key=4d99c08c8adc19218dd31e7d7794329c',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    var movies = response.results;
+                    showMovies(movies, container);
+                    hideLoader();
+                },
+                error: function() {
+                    console.log('Error al cargar los datos de la API');
+                    hideLoader();
+                }
+            });
+        }, 3000); // Duración de 3 segundos (3000 milisegundos)
     }
 
     // Mostrar las películas en el contenedor
@@ -35,20 +42,20 @@ $(document).ready(function() {
 
         movies.forEach(function(movie) {
             var movieHTML = `
-                <div class="contenedorPelicula">
-                    <img src="https://image.tmdb.org/t/p/w300/${movie.poster_path}" alt="Poster de la película">
-                    <div class="movie-details">
-                        <h3>${movie.title}</h3>
-                        <p><b>Código:</b> ${movie.id}</p>
-                        <p><b>Título Original:</b> ${movie.original_title}</p>
-                        <p><b>Idioma Original:</b> ${movie.original_language}</p>
-                        <p><b>Año:</b> ${movie.release_date}</p>
-                        <div class="paginacion">
-                            <button class="button-favorite">Agregar favoritos</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+          <div class="contenedorPelicula">
+            <img src="https://image.tmdb.org/t/p/w300/${movie.poster_path}" alt="Poster de la película">
+            <div class="movie-details">
+              <h3>${movie.title}</h3>
+              <p><b>Código:</b> ${movie.id}</p>
+              <p><b>Título Original:</b> ${movie.original_title}</p>
+              <p><b>Idioma Original:</b> ${movie.original_language}</p>
+              <p><b>Año:</b> ${movie.release_date}</p>
+              <div class="paginacion">
+                <button class="button-favorite">Agregar favoritos</button>
+              </div>
+            </div>
+          </div>
+        `;
 
             container.append(movieHTML);
         });
@@ -56,7 +63,6 @@ $(document).ready(function() {
 
     obtenerPeliculas();
 
-    // Agregar película a favoritos
     $(document).on('click', '.button-favorite', function() {
         var movieContainer = $(this).closest('.contenedorPelicula');
         var movieData = extractMovieData(movieContainer);
@@ -67,20 +73,30 @@ $(document).ready(function() {
         });
 
         if (existingFavorite) {
-            existingMovieMessage.removeClass('hidden');
-            setTimeout(function() {
-                existingMovieMessage.addClass('hidden');
-            }, 3000);
+            showExistingMovieMessage();
         } else {
             storedFavorites.push(movieData);
             localStorage.setItem('favorites', JSON.stringify(storedFavorites));
             $(this).text('Agregada a favoritos').prop('disabled', true);
-            successMessage.removeClass('hidden');
-            setTimeout(function() {
-                successMessage.addClass('hidden');
-            }, 3000);
+            showSuccessMessage();
         }
     });
+
+    // Mostrar mensaje de película existente en favoritos
+    function showExistingMovieMessage() {
+        existingMovieMessage.removeClass('hidden');
+        setTimeout(function() {
+            existingMovieMessage.addClass('hidden');
+        }, 3000);
+    }
+
+    // Mostrar mensaje de éxito al agregar a favoritos
+    function showSuccessMessage() {
+        successMessage.removeClass('hidden');
+        setTimeout(function() {
+            successMessage.addClass('hidden');
+        }, 3000);
+    }
 
     // Obtener datos de la película
     function extractMovieData(movieContainer) {
@@ -111,6 +127,7 @@ $(document).ready(function() {
     // Buscar película en la API
     function searchMovie(movieName) {
         container.empty();
+        showLoader();
 
         $.ajax({
             url: `https://api.themoviedb.org/3/search/movie?api_key=4d99c08c8adc19218dd31e7d7794329c&query=${movieName}`,
@@ -119,9 +136,11 @@ $(document).ready(function() {
             success: function(response) {
                 var movies = response.results;
                 showMovies(movies, container);
+                hideLoader();
             },
             error: function() {
                 console.log('Error al cargar los datos de la API');
+                hideLoader();
             }
         });
     }
@@ -143,6 +162,7 @@ $(document).ready(function() {
 
     // Obtener películas paginadas
     function obtenerPeliculasPaginadas(page) {
+        showLoader();
         $.ajax({
             url: `https://api.themoviedb.org/3/movie/popular?api_key=4d99c08c8adc19218dd31e7d7794329c&page=${page}`,
             method: 'GET',
@@ -151,10 +171,24 @@ $(document).ready(function() {
                 var movies = response.results;
                 showMovies(movies, container);
                 $('#nroPaginacion').text(page);
+                hideLoader();
             },
             error: function() {
                 console.log('Error al cargar los datos de la API');
+                hideLoader();
             }
         });
+    }
+
+    // Mostrar rueda de carga
+    function showLoader() {
+        loader.removeClass('hidden');
+    }
+
+    // Ocultar rueda de carga después de 3 segundos
+    function hideLoader() {
+        setTimeout(function() {
+            loader.addClass('hidden');
+        }, 3000);
     }
 });
